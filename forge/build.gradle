@@ -1,6 +1,8 @@
 plugins {
-	id "com.github.johnrengelman.shadow" version "7.0.0"
+	id "com.github.johnrengelman.shadow" version "7.1.0"
 }
+
+def ENV = System.getenv()
 
 architectury {
 	platformSetupLoomIde()
@@ -13,44 +15,21 @@ configurations {
 	compileClasspath.extendsFrom common
 	runtimeClasspath.extendsFrom common
 	developmentForge.extendsFrom common
-	dev
-}
-
-loom {
-	accessWidenerPath = project(":common").file("src/main/resources/ftbchunks.accesswidener")
-	forge {
-		convertAccessWideners = true
-		extraAccessWideners.add("ftbchunks.accesswidener")
-		mixinConfigs = [
-				"ftbchunks-common.mixins.json"
-		]
-	}
-}
-
-artifacts {
-	dev(jar)
 }
 
 dependencies {
 	forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
+
 	modApi "dev.architectury:architectury-forge:${rootProject.architectury_api_version}"
+	modApi("dev.ftb.mods:ftb-library-forge:${rootProject.ftb_library_version}") { transitive false }
 
-	modImplementation("dev.ftb.mods:ftb-library-forge:${rootProject.ftb_library_version}") { transitive = false }
-	modImplementation("dev.ftb.mods:ftb-teams-forge:${rootProject.ftb_teams_version}") { transitive = false }
-
-	common(project(path: ":common", configuration: "dev")) { transitive false }
+	common(project(path: ":common", configuration: "namedElements")) { transitive false }
 	shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive false }
 }
 
-apply from: "https://raw.githubusercontent.com/FTBTeam/mods-meta/main/gradle/extra-local-mods.gradle"
-
 processResources {
-	def file = new File("./build/resources/main/META-INF/mods.toml")
-	if (file.exists()) {
-		file.delete()
-	}
-
 	exclude '.cache'
+
 	inputs.property "version", project.version
 
 	filesMatching("META-INF/mods.toml") {
@@ -59,8 +38,7 @@ processResources {
 				"forgeversion": project.forge_version,
 				"forgeshortversion": project.forge_version.split("\\.")[0],
 				"mcversion": project.minecraft_version,
-				"ftblibraryversion": project.ftb_library_version,
-				"ftbteamsversion": project.ftb_teams_version
+				"ftblibraryversion": project.ftb_library_version
 	}
 }
 

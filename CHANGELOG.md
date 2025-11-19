@@ -4,174 +4,88 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2101.1.10]
-
-### Added
-* Waypoints added via API can now be marked as transient
-  * Transient waypoints are not persisted on the client after player logout or dimension changing
-  * Transient waypoints should be added via the new `WaypointManagerEvent.AVAILABLE` Architectury event
-
-### Fixed
-* Fixed minimap game time display being out by 6 game hours
-* Fixed added waypoint Y values being way out in void dimensions
-* Fixed Yellow Archwood (Ars Elemental) being wrong colour on the map (thanks @cragolf)
-* Fixed a dupe bug under certain circumstances
-
-## [2101.1.9]
-
-### Added
-* Added `pt_br` translation (thanks @Xlr11)
-* Added `es_max` translation (thanks @TheLegendofSaram)
-* Added `ja_jp` translation (thanks @twister716)
-
-### Fixed
-* Ensure F3 isn't being held when checking for key presses
-  * e.g. if "Add Waypoint" is bound to "B", pressing F3+B no longer pops up the add waypoint dialog
-* Fixed an edge case causing NPE's during checking blockstates for water
-* Fixed some entity face map icons going missing when using higher-resolution texture packs
-* Fixed Create framed glass blocks rendering black on the map (thanks @Varocraft25)
-
-## [2101.1.8]
-
-### Added
-* Added client config "Reticle Lines" (default true) to minimap settings, to control reticle crosshairs draw on the minimap
-* Added client config "Show Text above Minimap" (default false) to control if minimap info is shown above or below minimap
-* Waypoints may now be edited from the waypoint manager either by double-clicking, or right-clicking and selecting "Edit" from the context menu
-* Added tr_tr translation (thanks @RuyaSavascisi)
-* Added `#create:table_cloths` to `ftbchunks:interact_whitelist` to allow Create Table Cloths (shop blocks) to be right-clicked anywhere
-
-### Changed
-* Now using FTB Library 2101.1.10 config system
-  * **IMPORTANT NOTE FOR PACK MAKERS** any customized FTB Chunks configuration distributed in `defaultconfigs/ftbchunks/` must now be distributed in `config/` !
-  * `defaultconfigs/ftbchunks/ftbchunks-client.snbt` -> `config/ftbchunks-client.snbt`
-  * `defaultconfigs/ftbchunks/ftbchunks-world.snbt` -> `config/ftbchunks-world.snbt`
-  * Server admins may locally copy `config/ftbchunks-world.snbt` to `world/serverconfig/ftbchunks-world.snbt` if they wish to maintain custom settings which will not be reset by modpack updates
-* Improved entity icons for entities from the Aquaculture mod
-* Updated ru_ru translation (thanks @BazZziliuS)
-
-### Fixed
-* Fixed light technical blocks (`minecraft:light`) rendering black on the map
-* Fixed a piston protection issue which allowed blocks to be pulled out of protected chunks with a sticky piston
-* Fixed some entities not rendering on the map/minimap at all
-  * Entities where the texture isn't known now show on the map as a generic "dot" icon
-
 ## [2101.1.7]
 
-### Fixed
-* Fixed mod crashing on dedicated server
+### Added
+* Added API method to create server teams with fixed UUIDs
 
 ## [2101.1.6]
 
 ### Added
-* Added "Minimap Pointer Icon Mode" clientside setting to control whether pointer, player head, or both, are show on the minimap
+* Added `/ftbteams nbtedit` admin command to allow direct NBT viewing/editing of team data
+  * FTB Library 2021.1.25+ required
+  * Use with caution; incorrect edits could leave the team in an unusable state. Make backups!
 
 ### Fixed
-* Barrier blocks no longer show up on the map/minimap
-* Improved integration for map block display with several third party mods
+* Team "extra data" is now copied from player to party team when the party team is initially formed.
 
 ## [2101.1.5]
 
+### Added
+
+* Added `/ftbteams force-add` and `/ftbteams force-remove` commands
+  * Allows an admin user to quickly add/remove any player (including offline players if known to server) to/from any team
+
 ### Fixed
-* Fixed client-side issues with piston checking (from last update) when connected to dedicated server
+* Fixed "internal error" message when using `/ftbteams transfer_ownership` command
+* Fixed output formatting for error message when trying to transfer ownership to an invalid player
+* Fixed a server crash if vanilla clients attempt to connect, and no other installed mod has already prevented a connection
+  * This technically means FTB Teams can now be used as a (limited) server-only mod, without any GUI functionality or translations
+  * Lack of translations could be fixed by making a resource pack containing the files in https://github.com/FTBTeam/FTB-Teams/blob/dev/common/src/main/resources/assets/ftbteams/lang/
 
 ## [2101.1.4]
 
-### Added
-* Added protection for pistons moving blocks, including large block structure (e.g. vanilla-style flying machines)
-  * Enabled by default; can be disabled via 'piston_protection' server setting
-  * When enabled, pistons cannot push blocks from the chunk the piston is in to another chunk if the new chunk is owned by a different team, and that team does not have public block-edit permissions
-  * Similar restrictions apply to blocks which would be destroyed by piston moving
-* Add client config setting "Pointer Icon Mode" to control the appearance of the player pointer icon on maps
-  * Can display the player face, a heading arrow, or both
-* Displayed component values for the minimap can now be configured via the client config screen
-
 ### Fixed
-* Possibly fixed an issue leading to hangs on server shutdown (hard to know for certain; the issue is difficult to reproduce)
-* Fixed output of `/ftbchunks admin unload_everything` being misleading
-  * The command ran correctly, un-forceloading all forceloaded chunks, but reported the number of _all_ claimed chunks, not just the forceloaded ones
-* Fixed colouring for some blocks (primarily redstone-related) on the map/minimap leading to an ugly-looking artifacts on the map
-* Integrated Dynamics Menril Leaves now show up as light blue on the map instead of the default green
+* Fixed a FTB Team Bases related crash when attempting to visit bases of disbanded teams
 
 ## [2101.1.3]
+
+### Added 
+* Added per-player toggle to redirect chat into ftb teams chat
+  * When enabled, all messages typed into chat will go only to the player's team instead of the usual broadcast 
+  * Use `/ftbteams redirect_chat` command to toggle
+  * Or use the new toggle button on the teams GUI (chat icon, top right)
+* Updated `es_es` and `es_mx` translations (thanks @ArrivedBog593)
+* Updated `fr_fr` translation (thanks @nogapra)
+* Added `ja_jp` translation (thanks @Twister)
+* Added `pt_br` translation (thanks @Xlr11)
+* Added `uk_ua` translation (thanks @GIGABAIT93)
+* Added `ru_ru` translation (thanks @BazZziliuS)
+
+## [2101.1.2]
+
+### Changed
+* FTB Teams commands which provide command completion for known teams are now smarter about suggesting only relevant teams 
+  * e.g. `/ftbteams server settings ...` now only lists known server teams, not other team types
+
+### Fixed
+* Fixed bug where renaming a team's display name didn't sync change to clients immediately, causing command completion to provide the previous name
+  * This also means any team names and colors will now be immediately visible on client display (e.g. FTB Chunks) if changed by command
+ 
+## [2101.1.1]
+
+### Added
+* Added a `tr_tr` translation, thanks @RuyaSavascisi
 
 ### Changed
 * Overhauled and cleaned up many icon textures
 
 ### Fixed
-* Do some extra client-side map init checks which should resolve some issues with clients switching server, using technologies like Velocity proxy
-
-## [2101.1.2]
-
-### Added
-* Added many more entity face map icons and improved several existing ones
-  * Also added a config option in client config (Minimap section) to toggle individual entity types on & off
-* New & improved waypoint addition screen
-
-### Fixed
-* Possible fix for occasional problem where some regions just don't render on the map or minimap
-  * Can't be sure, the problem is very hard to reproduce
-
-## [2101.1.1]
-
-### Added
-* Added `/ftbchunks admin open_claim_gui_as` command
-  * Allows server admins to open the chunk claim gui as any player
-  * Offline players are also supported, but names of offline players aren't suggested in command tab-completion
-* Added team property defaults in server config (see "Team Property Defaults" section)
-  * Properties for newly-created teams are now taken from these defaults
-
-### Changed
-* Reworked the chunk claim GUI for a more polished visual appearance
-  * Added an "Unclaim All" button (trash can button, top-left) to reset all claims
+* Fixed the `/ftbteams party settings_for ...` command not functioning correctly
 
 ## [2101.1.0]
 
 ### Changed
-* Minecraft 1.21.1 is now required; this no longer supports Minecraft 1.21
-* Vanilla Cherry Trees now show up pink on the map
+* Ported to MC 1.21.1
+  * Will not run on MC 1.21
 
 ### Added
 * Sidebar buttons for this and other FTB mods can now be enabled/disabled/rearranged (new functionality in FTB Library 2101.1.0)
 
-### Fixed
-* Fixed expand/collapse buttons on waypoint editor screen being flipped
-* New minimap info components (TPS/game time/real time) are now hidden by default
-  * Can be toggled on via info settings on the large map screen
-
-## [2100.1.1]
-
-### Added
-* The waypoint manager screen has had a facelift
-  * No longer a full-screen GUI
-  * Added a delete button alongside the visibility toggle button on the manager screen
-* Added waypoint sharing; there is now a "Share" option on the context menus for waypoints on the large map, and in the waypoint manager screen
-* Player icon on the large map screen is now combined with a pointer indicating the player's facing direction
-* Added new entity tag: `ftbchunks:entity_mob_griefing_blacklist`
-  * Prevents mob griefing by any entities in this tag if mob griefing protection is enabled in team settings
-  * Note: only works on NeoForge at this time (Fabric remains limited to Endermen only)
-* Info text lines under the minimap are now highly configurable
-  * Configure with the "Minimap Info" icon on the left of the large map screen
-  * Entries can be enabled/disabled/reordered/configured
-  * Added new real time, game time and FPS lines in addition to existing zone/biome/player-pos/debug lines
-
-### Fixed
-* Fixed the `/ftbchunks waypoint add` command only working for loaded chunks
-* Fixed block/item/entity tags not being detected
-* If the minimap is being displayed in top-right of screen (the default), then any potion effect icons are moved to the left of the minimap to avoid overlap
-* Fixed the map keybind (by default 'M') not working to close an open map
-  * In addition, Ctrl + M (or whatever the map key is bound to) no longer toggles minimap by default
-  * This was always a kludge; minimap toggling is now its own keybind (unbound by default)
-
 ## [2100.1.0]
 
 ### Changed
-* Ported to Minecraft 1.21. Support for Fabric and NeoForge.
-  * Forge support may be re-added if/when Architectury adds support for Forge
-
-## [2006.1.1]
-
-### Fixed
-* Fixed the sidebar map buttons ignoring any GameStages restrictions in force
+* Ported to MC 1.21
 
 ## [2006.1.0]
 
@@ -179,282 +93,78 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Ported to Minecraft 1.20.6. Support for Fabric and NeoForge.
   * Forge support may be re-added if/when Architectury adds support for Forge
 
-## [2004.1.3]
-
-### Fixed
-* Fixed server crash related to long range player tracking
-
 ## [2004.1.2]
 
 ### Changed
-* Ported to Minecraft 1.20.4.  Support for Forge, NeoForge and Fabric.
-* A few minor GUI improvements.
-
-## [2001.2.3]
-
-### Added
-* Added a team property to control whether PvP is permitted in a team's claims
-  * If PvP is prevented, then if either the attacking player or the attacked player is in such a claim, PvP damage will be cancelled
-  * Can be controlled by server admin with the server config "Allow PvP Combat"
-    *  "always" (default) allows PvP everywhere
-    * "never" prevents PvP in all claimed chunks
-    * "per_team" allows teams to configure PvP for their claims via new team property "Allow PvP Combat"
-  * Not 100% guaranteed to prevent all forms of PvP damage, but direct or projectile damage is prevented where the damage source can be traced back to a player
-
-### Fixed
-* Fixed a held item desync when an item or block right-click is prevented in a claimed area
-* Cleaned up stale kubjes support files (kubejs.classfilter.txt / kubejs.plugins.txt) - they're in FTB XMod Compat now
-
-## [2001.2.2]
-
-### Fixed
-* Fixed crash on player disconnect if they don't have a team assigned
-  * Should never occur under normal circumstances but could happen if external factors force a premature disconnect
-
-## [2001.2.1]
-
-### Fixed
-* Fixed "Show waypoints in world" client config setting being ignored for waypoint icons
-  * It was only working to suppress beacons when set to false, now it suppresses icons too
-* Fixed NPE when checking for fake players which had a null name or UUID in their GameProfile
-* Client memory fix; eliminated some unnecessary region data loading when players change chunk settings (claiming, forceloading)
+* Ported to Minecraft 1.20.4. Support for Fabric, Forge and NeoForge.
 
 ## [2001.2.0]
 
 ### Changed
-* All cross-mod integration has been moved to the **FTB XMod Compat** mod
-  * This includes: FTB Ranks / Luckperms, Waystones, Game Stages (Forge only) and Common Protection API (Fabric only)
+* Technical addition: property defaults are now initialised lazily, via supplier
+  * No player-visible change to this right now, but it makes it easier for mods to define config-based defaults, e.g. FTB Chunks team properties
+  * Technically there is an API break, but only if you were trying to construct property objects yourself using the from-network constructor (and there was no good reason to do that!)
+* Deprecated the `CustomPartyCreationHandler` object and related API methods
+  * Replaced with simpler `FTBTeamsAPI#setPartyCreationFromAPIOnly(boolean)` method
+  * Intended for use in custom modpacks where players shouldn't create teams directly themselves (either via CLI or GUI)
+* Updated party team creation API to work without requiring the party-owning player to be online
 
-## [2001.1.5]
+### Added
+* Added fr_fr translation (thanks @HollishKid and @K0LALA)
 
 ### Fixed
-* Fixed cache invalidation issue when (un)claiming/loading chunks which caused client/server desync
+* Fixed the `/ftbteams party info` command always showing your own party info, regardless of team that was passed to the command
 
 ## [2001.1.4]
 
 ### Fixed
-* Fixed a NoSuchMethodError crash with Game Stages mod
-* Worked around Optifine bug, which is firing Forge mob griefing events on the client and causing client crashes
+* Fixed team property changes not getting saved correctly
 
 ## [2001.1.3]
 
 ### Fixed
-* Fixed Endermen still being able to grief claimed chunks
-  * Related, fixes crashes with recent Forge releases (event cancelling semantics have changed for the mob griefing event)
+* Fixed `/ftbteams party join` and `/ftbteams party decline` commands not working correctly
 
 ## [2001.1.2]
 
 ### Added
-* Updated to MC 1.20.1, based on 1902.3.22 release
+* Ported to Minecraft 1.20.1
+  * Equivalent in functionality to the 1902.2.14 release
 
-## [1902.3.22]
-
-### Added
-* The claim manager screen can now be opened without first opening the large map screen
-  * Added a new sidebar button "FTB Chunks: Claim Manager" to open the claim manager screen
-  * Also added a new key binding to open the claim manager, not bound to any key by default
-* Added Luckperms support, as an alternative to FTB Ranks
-  * Same permission node names: "ftbchunks.max_claimed", "ftbchunks.max_force_loaded", "ftbchunks.chunk_load_offline", "ftbchunks.no_wilderness"
-* The minimap is now sized as a proportional of the current screen width
-  * Base size is 10% of the screen width, although this is modifiable with the existing "Scale" client setting
-  * Added new "Proportional Sizing" client setting, true by default. Set this to false if you prefer the old behaviour (fixed-size minimap regardless of screen resolution)
-
-### Fixed
-* Fixed occasional (non-fatal) NPE which could be thrown in the client block scanning thread
-* Made chunks owned by server teams exempt from claim and forceload auto-expiry (server teams are admin-level)
-
-## [1902.3.21]
+## [1902.2.12]
 
 ### Added
-* Fabric: FTB Chunks now acts as a protection provider for [Patbox's Common™ Protection API](https://github.com/Patbox/common-protection-api)
-  * Mods which support the Common Protection API will now benefit from FTB Chunks claim protection
-* Player arrow icon is now shown on the minimap even when minimap rotation is not locked
-  * Added new "Show Player When Unlocked" client config setting to toggle this behaviour
-* Added mob griefing protection (Enderman only for now, but maybe more in future)
-  * New "Mob Griefing" boolean property, which can be changed in the team properties manager (top right button in the FTB Teams window)
-  * True by default; prevents Endermen taking or placing blocks in claimed chunks
-* Large map screen now supports more hotkeys, and hotkey tooltips have been added to buttons on this screen as appropriate
-  * "S" opens the settings GUI
-  * "Ctrl + S" opens the server settings GUI, if the player has permission
-  * The "Waypoint Manager" keybind now works in the large map screen too
-  * "C" still opens the chunk claiming GUI
-* In-world waypoint dots can now be seen at any range; no more arbitrary cut-off at around 750 blocks
-  * Added new "Waypoints: max draw distance" setting in client config to control the maximum range
-  * Note: the vertical beacon still fades out when more than a couple of hundred blocks away
-* Added some missing face icons for various vanilla entities (mostly new 1.19 mobs, but some older ones too)
-* Added "Override Team Location Visibility" boolean server config setting, default false
-  * When true, all players can see everyone on the map, regardless of team location visibility preferences
-* Added "Dimension Whitelist" setting to server config (in addition to existing "Dimension Blacklist")
-  * If whitelist is not empty, *only* dimension ID's in the whitelist may have chunks claimed, and only if those dimensions are not in the blacklist
-  * Wildcarded dimensions are now supported too, e.g. `somemod:*` matches all the dimensions added by the mod `somemod`
-* When chunks are claimed/unclaimed/forceloaded/unforceloaded in the chunk GUI, feedback is now given on how many chunks were modified
-  * Also shows the reasons why any chunks could not be modified (e.g. dimension blacklisted, chunk owned by someone else...)
+* Team properties can now include properties which are lists of string (required by new FTB Chunks builds)
 
 ### Fixed
+* Major improvements in efficiency of server->client sync for team data
+  * Should greatly reduce network traffic and load for busy servers (many players & teams) in particular
+* A few GUI and logic fixes related to handling invites for team members and allies
+  * Allow players to be added as allies of your team even when they are a member of a different team
+  * Don't allow invitations to be sent to players who are already in a different team (they couldn't actually be added, but a useless invitation was being sent)
+  * Only show the GUI "Manage Allies" and "Invite Players" buttons for party teams
+  * Don't show "Disband Party" context menu entry in the GUI for non-party teams
+* Don't allow server teams to be created with names shorter than 3 characters
+* Converted a couple of more messages into translations
 
-* Some significant client-side memory management work has been done
-  * Addressed some conditions which could lead to client-side memory starvation when the game has been running for a while
-  * Specifically, well-explored worlds where the player is either moving around the world a lot, or viewing the world with high map zoom-out
-  * Periodically, least-recently accessed region data is released from RAM, requiring reload from disk on the next access. Every 300 seconds by default; can be tuned in client config.
-  * When the large map screen is closed, regions furthest from the player are released from RAM, down to 32 loaded regions by default; also tunable in client config.
-  * Map zoom-out is limited where the ratio of the number of known (explored) regions to available JVM memory is poor. Limiting zoom-out reduces the number of regions which need to be loaded in memory at a given moment. This can be disabled in client config if you prefer.
-  * New client config settings are available in the "Memory Usage" section of the client config; tuning them is a trade-off between RAM usage and disk activity. However, even when tuned toward lower RAM usage, the level of disk activity should not be a major concern. 
+## [1902.2.11]
 
-## [1902.3.20]
+### Fixes
+* Fixed client-side NPE's when teams data is unavailable on the client
+  * Doesn't fix the root cause, which is that for some reason client has not received valid teams data from the server
+  * This could occur if trying to play in offline mode, which is not supported
 
-### Fixed
-
-* Issues with FTB Library
-
-### Changed
-
-* Bumped minimum version for FTB Library
-
-## [1902.3.19]
+## [1902.2.10]
 
 ### Added
-* Architectury >= 6.5.77 is now a requirement
-  * This version of Architectury fixes some block break event timing issues leading to dupes on Fabric
-
-## Fixed
-* Fixed a crash with fake player mods which use buckets to pick up water in protected chunks
-* Fixed interaction with Fabric mods which do block placement protection by firing the FAPI block break event directly (thanks @TelepathicGrunt)
-  * Example mod: Bumblezone 
-  * Architectury currently handles this via its own mixin
-
-
-## [1902.3.18]
-
-### Fixed
-- Fixed an NPE which can occur in conjunction with some mods' fake player objects
-
-## [1902.3.17]
-
-### Fixed
-- Fixed a problem on Fabric (Forge not affected) with block break permissions in protected chunks
-
-## [1902.3.16]
-
-### Added
-- New team property "Non-living Entity Attack Mode", used when left-clicking non-living entities like item frames or paintings
-- The `max_idle_days_before_unforce` and `max_idle_days_before_unclaim` server config settings can now be floating-point values
-- Fade distances for waypoint beacons and waypoint dots can now be configured independently
-  - Previously in-game dot icons for waypoints never faded out, regardless of proximity
-  - New client-side setting "Waypoint dot fade distance", default 1 block away
-  - "Waypoint fade distance" is now "Waypoint beacon fade distance" (default still 12 blocks)
-
-### Fixed
-- Fixed a block placement dupe issue on Fabric
-  - On Fabric, there is now only a single "Block Interaction and Edit" team property, since it isn't possible to reliably distinguish between right-clicking a block to use vs. right-clicking a block to place another block
-  - Forge functionality is unchanged
-- Re-sync player's held item when a block placement fails due to protected claims
-- Fixed another chunkloading issue on Forge where stale tickets weren't always being cleaned up on server restart
-
-## [1902.3.15]
-
-### Added
-- The handling of Fake Player access to protected chunks has been improved
-  - New team property "Allow Fake Players by Player ID", default true. This is the secure way to allow fake player access to your claims, but it depends on mods actually giving their fake players the ID of the real player deploying that fake player. Examples of mods which do this properly are the Mekanism Digital Miner, PneumaticCraft: Repressurized Drones, and Modular Routers (with an installed Security Upgrade).
-  - Team property "Allow Fake Players" is now "Allow All Fake Players", and is false by default (you may wish to review this setting for your team). Beware: setting this to true treats ALL fake players as team allies, including those from blocks/entities owned by potentially hostile players!
-  - New team property "Allied Fake Player Names/IDs": you can add names or IDs of known fake players. Beware: adding names or IDs to this list treats these fake players as team allies, even from blocks/entities owned by potentially hostile players!
-- Right-clicking corpse entities from the "Corpse" mod is now permitted in any claimed chunk
-  - the `corpse:corpse` entity type is added to the `ftbchunks:entity_interact_whitelist` entity type tag
-- Sharestones from the Waystones mod, and all waystones from the Fabric Waystones mods can now be interacted with in claimed chunks
-  - added some more entries to the `ftbchunks:block_interact_whitelist` block tag
-- Added new server-side config setting `max_idle_days_before_unforce`
-  - If no member of a team logs in for this many days, any force-loaded chunks owned by the team will become un-forceloaded
-  - Default is 0, meaning no un-forceloading will be done; server admins should set this to a value suiting their server
-- Added new protection team property: "Non-living Entity Attack Mode"
-  - Allows for protection from left-clicking of non-living entities like Item Frames and Paintings in your base
-  - Does *not* prevent living entities from being attacked
-
-### Fixed
-- Fixed NPE when a block break event is received with bad level data in it
-- Fixed player head icons in the previous dimension not disappearing from the map or minimap when you change dimension
-  - Only players on long-range tracking (i.e. outside normal vanilla entity tracking range)
-- Fixed chunkloading issue on Forge where some forceloaded tickets weren't being cleared when offline chunkloading is disabled for a team
-  - Causing chunks to sometimes stay loaded when they should not be
-
-## [1902.3.14]
-
-### Added
-- Gamestage support for map and minimap usage
-  - New `require_game_stage` server setting, default false. If true, players must have the `ftbchunks_mapping` stage to view the map or minimap
-  - Requires KubeJS (Forge or Fabric) and/or Gamestages (Forge only) to be installed
-
-### Fixed
-- Fixed player death waypoints being added in the wrong place on Fabric
-- Fix force-loaded chunks not always ticking entities & block entities in those chunks
-
-## [1902.3.13]
-
-### Added
-* Server settings are now editable via a new button in the map GUI (bottom right), for players with permission level >= 2
-
-### Fixed
-* Fixed a server CME crash under some circumstances when players disconnect
-
-## [1902.3.12]
-
-### Fixed
-* Fixed NPE sometimes occurring on player login with FTB Ranks installed
-
-## [1902.3.11]
-
-### Fixed
-* Fixed NPE sometimes occurring on player login (getting player's team too early)
-
-## [1902.3.10]
-
-### Added
-
-* Square minimap option (see "Square Minimap" in client options, default false)
-* Added ability for teams to specify new visibility settings in Team settings
-  * "Location Visibility" determines how player heads are visible to players in other teams on the map (default: Allies)
-  * "Claim Visibility" determines how chunk claims are visible to other teams on the map (default: Public)
-  * This means player heads will only be visible to team-mates and allies by default; if you're not in a party team but want to be visible on the map, set your "Location Visibility" to "Public" in team settings.
-* Player heads can now be tracked on the map at any range, not just inside the default entity tracking range
-  * The same visibility restrictions apply as above, via "Location Visibility"
-  * Added server-side config item `long_range_tracker_interval` which controls how frequently long-range tracking data is sent by the server to clients; default is every 20 ticks (for players who are moving). 
-  * Set this to 0 to disable long-tracking entirely
-  * Be careful about setting this to very low (non-zero) values; it can cause extra server and network load, especially on very busy servers
-* Added entity interaction protection as a Team setting
-  * Controls the ability for non-team-members to interact with e.g. Armor Stands, Item Frames and other entities
-  * Support for entity interaction whitelisting via the `ftbchunks:entity_interact_whitelist` entity type tag
-* Added hotkey 'C' to quickly switch between large map GUI and chunk claiming GUI
-* Added a hotkey (not bound by default) to quickly add a waypoint at the player's current position
-* Added a client configurable distance whereby death waypoints are automatically removed if the player gets close enough
-  * Default of 0 means death waypoints are not auto-removed
-* Added a waypoint manager GUI, accessible via a button on the large map GUI, or via hotkey (unbound by default)
-  * Can be used to view all of your waypoints, sorted by dimension and distance, toggle visibility, change color & label, and delete them
-* Added server configurable timeout whereby a team's chunk claims are automatically released if no one in the team logs in
-  * Default of 0 days means no automatic claim loss
-  * Intended to prevent claims owned by teams who no longer play hanging around forever
-  * See `max_idle_days_before_unclaim` in server config file
-* Beneficial splash and lingering potions may be used by any player in any chunk, regardless of claim protection
-* A player's original chunk claims are now remembered when they join a team and returned to them if they leave the team
-  * Prevents claim stealing by maliciously inviting then kicking a player from a team
-  * This doesn't apply retrospectively; claims made before this release of the mod are not remembered in this way
-* Added ability to temporarily force-load a chunk via chunk claiming GUI
-  * Can use the mouse wheel on force-loaded chunks owned by your team to adjust a force-load time for the chunk
-  * Chunk will be automatically unforced within 10 minutes of this time expiring (but kept claimed, of course)
-* The way team claim and forceload limits is calculated has been significantly reworked
-  * Previously the team owner's limits were used, leading to confusion if a team member with higher limits joined
-  * Now there is a server configurable `party_limit_mode` to control this
-  * LARGEST (default): use the limits of the team member with the largest limits
-  * SUM: team limit is the sum of all team members' limits
-  * OWNER: use the owner limits only (old behaviour)
-  * AVERAGE: use an average of all members' limits
-  * Note that limits can't be fully calculated until players actually log in
-  * Also added `hard_team_claim_limit` and `hard_team_force_limit` server configurables; if set to a non-zero value, these hard limits apply regardless of calculated team limits
-* Integration with the Waystones mod has been added back
-
-### Fixed
-* Fixed fake death markers sometimes being created (generally when some other mod cancelled a player death)
-* Fixed forced chunks sometimes staying loaded when they shouldn't (e.g. if all players in a team have logged out and offline force-loading is disabled)
-* Fixed forced chunks sometimes not getting loaded when they should (e.g. player logs in when offline-forceloading is disabled)
-* Fixed team data not getting properly saved to disk when a player leaves a party team
-* Fixed deleted party team data not getting purged from disk
-* Fixed Ghast fireballs being able to grief protected chunks
-  * A more fundamental problem here is that not all explosions sources can be determined, and Ghast fireballs fall into this category. Previously such explosions were not protected against but are now.
-  * Added a server-side config item `protect_unknown_explosions` (default true) to control this behaviour
+* Major GUI overhaul; it is now possible to do just about anything with the GUI that can be done with the `/ftbteams` command
+  * Players in the teams GUI can now be clicked for a context menu with applicable operations, based on your rank and their
+  * If you are officer or owner, buttons are visible at the top to invite players to your party, or manage team allies
+  * Got rid of the "WIP" message :)
+* The team chat history now has a maximum size, default 1000 lines
+  * This can be adjusted up or down via the team property settings
+* Team properties are now separated into categories in the settings GUI, based on which mod registered the properties
+  * E.g. FTB Chunks properties are in their own subsection, separate from basic team properties
+* API: new `TeamAllyEvent` is fired when an ally is added or removed
+* Pressing Tab in the teams GUI gives focus to the chat input textbox
+* Converted many messages into translations

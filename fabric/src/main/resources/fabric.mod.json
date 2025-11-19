@@ -1,35 +1,26 @@
 {
 	"schemaVersion": 1,
-	"id": "ftbchunks",
+	"id": "ftbteams",
 	"version": "${version}",
-	"name": "FTB Chunks",
-	"description": "Claim chunks to protect your base from griefers!",
+	"name": "FTB Teams",
+	"description": "FTB Teams adds ability to create your own teams that can be used for quests etc.",
 	"authors": [
 		"FTB Team"
 	],
 	"contact": {
-		"sources": "https://github.com/FTBTeam/FTB-Chunks",
-		"issues": "https://github.com/FTBTeam/FTB-Chunks/issues"
+		"sources": "https://github.com/FTBTeam/FTB-Teams",
+		"issues": "https://go.ftb.team/support-mod-issues"
 	},
 	"license": "All Rights Reserved",
 	"entrypoints": {
 		"main": [
-			"dev.ftb.mods.ftbchunks.fabric.FTBChunksFabric"
-		],
-		"client": [
-			"dev.ftb.mods.ftbchunks.fabric.FTBChunksFabricClient"
+			"dev.ftb.mods.ftbteams.fabric.FTBTeamsFabric"
 		]
 	},
-	"mixins": [
-		"ftbchunks-fabric.mixins.json",
-		"ftbchunks-common.mixins.json"
-	],
-	"accessWidener": "ftbchunks.accesswidener",
 	"depends": {
 		"fabric": "${fabricapiversionrange}",
 		"minecraft": "~${mcversion}",
 		"architectury": ">=${archversion}",
-		"ftblibrary": ">=${ftblibraryversion}",
-		"ftbteams": ">=${ftbteamsversion}"
+		"ftblibrary": ">=${ftblibraryversion}"
 	}
 }

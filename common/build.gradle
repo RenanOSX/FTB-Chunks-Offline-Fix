@@ -1,31 +1,19 @@
 dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+
 	modApi "dev.architectury:architectury:${rootProject.architectury_api_version}"
 
-	modImplementation("dev.ftb.mods:ftb-library:${rootProject.ftb_library_version}") { transitive = false }
-	modImplementation("dev.ftb.mods:ftb-teams:${rootProject.ftb_teams_version}") { transitive = false }
+	modApi "dev.ftb.mods:ftb-library:${rootProject.ftb_library_version}"
 }
 
 architectury {
-	common(/* "forge", */ "fabric", "neoforge")
-}
-
-configurations {
-	dev
-}
-
-loom {
-	accessWidenerPath = file("src/main/resources/ftbchunks.accesswidener")
-}
-
-artifacts {
-	dev(jar)
+	common(/*"forge",*/ "fabric", "neoforge")
 }
 
 publishing {
 	publications {
-		mavenForge(MavenPublication) {
-			artifactId = "${rootProject.archives_base_name}"
+		mavenCommon(MavenPublication) {
+			artifactId = rootProject.archivesBaseName
 			version ftbPublishing.mavenVersion
 			from components.java
 		}

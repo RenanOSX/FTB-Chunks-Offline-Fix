@@ -3,51 +3,39 @@ loaderVersion = "[${neoforgeloaderversion},)"
 issueTrackerURL = "https://go.ftb.team/support-mod-issues"
 license = "All Rights Reserved"
 
-[[mixins]]
-config = "ftbchunks-common.mixins.json"
-
 [[mods]]
-modId = "ftbchunks"
+modId = "ftbteams"
 version = "${version}"
-displayName = "FTB Chunks"
+displayName = "FTB Teams"
 authors = "FTB Team"
 description = '''
-Claim chunks to protect your base from griefers!
+FTB Teams adds ability to create your own teams that can be used for quests etc.
 '''
-# logoFile="logo.png"
-license = "All Rights Reserved"
 
-[[dependencies.ftbchunks]]
+[[dependencies.ftbteams]]
 modId = "neoforge"
-type = "required"
+type  = "required"
 versionRange = "${neoforgeversionrange}"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.ftbchunks]]
+[[dependencies.ftbteams]]
 modId = "minecraft"
-type = "required"
+type  = "required"
 versionRange = "[${mcversion},)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.ftbchunks]]
+[[dependencies.ftbteams]]
 modId = "architectury"
-type = "required"
+type  = "required"
 versionRange = "[${archversion},)"
 ordering = "AFTER"
 side = "BOTH"
 
-[[dependencies.ftbchunks]]
+[[dependencies.ftbteams]]
 modId = "ftblibrary"
-type = "required"
+type  = "required"
 versionRange = "[${ftblibraryversion},)"
-ordering = "AFTER"
-side = "BOTH"
-
-[[dependencies.ftbchunks]]
-modId = "ftbteams"
-type = "required"
-versionRange = "[${ftbteamsversion},)"
 ordering = "AFTER"
 side = "BOTH"

@@ -1,5 +1,5 @@
 plugins {
-	id "com.github.johnrengelman.shadow" version "7.0.0"
+	id "com.github.johnrengelman.shadow" version "7.1.0"
 }
 
 architectury {
@@ -13,17 +13,7 @@ configurations {
 	compileClasspath.extendsFrom common
 	runtimeClasspath.extendsFrom common
 	developmentNeoForge.extendsFrom common
-	dev
 }
-
-loom {
-	accessWidenerPath = project(":common").file("src/main/resources/ftbchunks.accesswidener")
-}
-
-artifacts {
-	dev(jar)
-}
-
 
 repositories {
 	maven {
@@ -33,24 +23,17 @@ repositories {
 
 dependencies {
 	neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
+
 	modApi "dev.architectury:architectury-neoforge:${rootProject.architectury_api_version}"
+	modApi("dev.ftb.mods:ftb-library-neoforge:${rootProject.ftb_library_version}") { transitive false }
 
-	modImplementation("dev.ftb.mods:ftb-library-neoforge:${rootProject.ftb_library_version}") { transitive = false }
-	modImplementation("dev.ftb.mods:ftb-teams-neoforge:${rootProject.ftb_teams_version}") { transitive = false }
-
-	common(project(path: ":common", configuration: "dev")) { transitive false }
+	common(project(path: ":common", configuration: "namedElements")) { transitive false }
 	shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive false }
 }
 
-apply from: "https://raw.githubusercontent.com/FTBTeam/mods-meta/main/gradle/extra-local-mods.gradle"
-
 processResources {
-	def file = new File("./build/resources/main/META-INF/neoforge.mods.toml")
-	if (file.exists()) {
-		file.delete()
-	}
-
 	exclude '.cache'
+
 	inputs.property "version", project.version
 
 	filesMatching("META-INF/neoforge.mods.toml") {
@@ -59,8 +42,7 @@ processResources {
 				"neoforgeversionrange": project.neoforge_version_range,
 				"neoforgeloaderversion": project.neoforge_loader_version,
 				"mcversion": project.minecraft_version,
-				"ftblibraryversion": project.ftb_library_version,
-				"ftbteamsversion": project.ftb_teams_version
+				"ftblibraryversion": project.ftb_library_version
 	}
 }
 
@@ -76,7 +58,6 @@ remapJar {
 	dependsOn shadowJar
 	archiveBaseName.set "${rootProject.archives_base_name}-${project.name}"
 	archiveClassifier.set null
-	atAccessWideners.add('ftbchunks.accesswidener')
 }
 
 jar {

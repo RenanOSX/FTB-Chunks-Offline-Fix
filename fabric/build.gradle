@@ -1,5 +1,9 @@
 plugins {
-	id "com.github.johnrengelman.shadow" version "7.0.0"
+	id "com.github.johnrengelman.shadow" version "7.1.0"
+}
+
+configurations {
+	shadowCommon
 }
 
 architectury {
@@ -13,65 +17,22 @@ configurations {
 	compileClasspath.extendsFrom common
 	runtimeClasspath.extendsFrom common
 	developmentFabric.extendsFrom common
-	dev
 }
-
-def generatedResources = file("src/generated/resources")
-def accessWidenerFile = project(":common").file("src/main/resources/ftbchunks.accesswidener")
-
-loom {
-	accessWidenerPath = accessWidenerFile
-}
-
-sourceSets {
-	main {
-		resources {
-			srcDir generatedResources
-		}
-	}
-}
-
-artifacts {
-	dev(jar)
-}
-
-//repositories {
-//	maven {
-//		url "https://maven.blamejared.com"
-//		content {
-//			includeGroup "com.faux.ingredientextension"
-//		}
-//	}
-//	maven {
-//		url "https://maven.nucleoid.xyz/"
-//		content {
-//			includeGroup "eu.pb4"
-//		}
-//	}
-//}
 
 dependencies {
 	modApi "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+
 	modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
 	modApi "dev.architectury:architectury-fabric:${rootProject.architectury_api_version}"
 
-	modImplementation("dev.ftb.mods:ftb-library-fabric:${rootProject.ftb_library_version}") { transitive = false }
-	modImplementation("dev.ftb.mods:ftb-teams-fabric:${rootProject.ftb_teams_version}") { transitive = false }
+	modApi("dev.ftb.mods:ftb-library-fabric:${rootProject.ftb_library_version}") { transitive false }
+	//modRuntime("dev.ftb.mods:ftb-chunks-fabric:${rootProject.ftb_chunks_version}") { transitive false }
 
-	common(project(path: ":common", configuration: "dev")) { transitive false }
+	common(project(path: ":common", configuration: "namedElements")) { transitive false }
 	shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 }
 
-apply from: "https://raw.githubusercontent.com/FTBTeam/mods-meta/main/gradle/extra-local-mods.gradle"
-
-// The AW file is needed in :fabric project resources when the game is run.
-task copyAccessWidener(type: Copy) {
-	from accessWidenerFile
-	into generatedResources
-}
-
 processResources {
-	dependsOn copyAccessWidener
 	inputs.property "version", project.version
 
 	filesMatching("fabric.mod.json") {
@@ -79,13 +40,8 @@ processResources {
 				"archversion": project.architectury_api_version,
 				"fabricapiversionrange": project.fabric_api_version_range,
 				"mcversion": project.minecraft_version,
-				"ftblibraryversion": project.ftb_library_version,
-				"ftbteamsversion": project.ftb_teams_version
+				"ftblibraryversion": project.ftb_library_version
 	}
-}
-
-sourcesJar {
-	dependsOn copyAccessWidener
 }
 
 shadowJar {
